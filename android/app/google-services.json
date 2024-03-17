@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "460391389322",
+    "project_id": "dhurandhar-3cb06",
+    "storage_bucket": "dhurandhar-3cb06.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:460391389322:android:a9a2ba6f0072ea76ccf573",
+        "android_client_info": {
+          "package_name": "com.app.dhurandhar"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAk4qGi5fpkk584hMZk57skpJT-g-gRx5c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
