@@ -20,8 +20,13 @@ class ProfileScreenProvider extends ChangeNotifier {
   }
 
   Future<void> updateUserDataWithFile(
-    BuildContext context,
-      String name, String address, File? profileImage) async {
+      BuildContext context,
+      String name,
+      String address,
+      String gender,
+      String bestGame,
+      String hobbies,
+      File? profileImage) async {
     var url = Uri.parse('${mBaseUrl}api/update_user/');
     final user = FirebaseAuth.instance.currentUser!;
     final token = await user.getIdToken();
@@ -33,6 +38,9 @@ class ProfileScreenProvider extends ChangeNotifier {
     // Add fields to the request (if any)
     request.fields['name'] = name;
     request.fields['address'] = address;
+    request.fields['gender'] = gender;
+    request.fields['best_game'] = bestGame;
+    request.fields['hobbies'] = hobbies;
 
     // Add file to the request
     if (profileImage != null) {
@@ -58,7 +66,8 @@ class ProfileScreenProvider extends ChangeNotifier {
     if (response.statusCode == 200) {
       toast(decodedResponse['message']);
       var cUser = UserData.fromMap(decodedResponse['user']);
-      Provider.of<ProfileScreenProvider>(context, listen: false).setCurrentUserData(cUser);
+      Provider.of<ProfileScreenProvider>(context, listen: false)
+          .setCurrentUserData(cUser);
       // CustomLogger.instance.singleLine('cUser: ${currentUser?.name}');
       // currentUser = cUser;
       // CustomLogger.instance.singleLine('cUser: ${currentUser?.name}');

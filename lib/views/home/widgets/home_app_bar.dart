@@ -13,8 +13,8 @@ class THomeAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Consumer<HomeScreenProvider>(builder: (context, provider, child) {
-      Size size = MediaQuery.of(context).size;
       return Padding(
         padding: EdgeInsets.symmetric(horizontal: size.width * 0.001),
         child: Row(
@@ -30,7 +30,8 @@ class THomeAppBar extends StatelessWidget {
             ),
             IconButton(
                 onPressed: () {
-                  launchScreen(context, const LocationPickerScreen(isFromHome: true));
+                  launchScreen(
+                      context, const LocationPickerScreen(isFromHome: true));
                 },
                 icon: Icon(
                   Iconsax.location,

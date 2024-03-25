@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -14,20 +16,28 @@ class PostEventProvider extends ChangeNotifier {
   String? address;
 
   updatePickedAddress(
-      BuildContext context, String address, double lat, double lng) {
-    this.address = address;
+      BuildContext context, String addr, double lat, double lng) {
+    address = addr;
     addressLatitude = lat.toString();
     addressLongitude = lng.toString();
     notifyListeners();
+    CustomLogger.instance.severe('updatePickedAddress 👉👉 {address: $address');
     Navigator.pop(context);
   }
 
   Future<void> postEventDataWithFile(
-      // BuildContext context,
+      BuildContext context,
       String title,
       String description,
       String datetime,
+      String locationName,
+      String lat,
+      String long,
       File? eventImage) async {
+    // if (locationName == null) {
+    //   toast("PLease select a location.");
+    //   return;
+    // }
     var url = Uri.parse('${mBaseUrl}api/create_event/');
     final user = FirebaseAuth.instance.currentUser!;
     final token = await user.getIdToken();
@@ -39,10 +49,12 @@ class PostEventProvider extends ChangeNotifier {
     // Add fields to the request (if any)
     request.fields['title'] = title;
     request.fields['description'] = description;
-    request.fields['location_name'] = address ?? "";
-    request.fields['location_latitude'] = addressLatitude ?? "";
-    request.fields['location_longitude'] = addressLongitude ?? "";
+    request.fields['location_name'] = locationName;
+    request.fields['location_latitude'] = lat;
+    request.fields['location_longitude'] = long;
     request.fields['datetime'] = datetime;
+    CustomLogger.instance
+        .severe('location_name GET 👉👉 {location_name: $address');
 
     // Add file to the request
     if (eventImage != null) {
@@ -67,6 +79,7 @@ class PostEventProvider extends ChangeNotifier {
     // // Check the response
     if (response.statusCode == 201) {
       toast(decodedResponse['message']);
+      Navigator.pop(context);
       notifyListeners();
       // Handle successful response
     } else {

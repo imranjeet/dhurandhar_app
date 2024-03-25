@@ -18,6 +18,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
   @override
   void initState() {
     super.initState();
@@ -25,8 +27,17 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   initData() async {
-    final homeProvider = Provider.of<HomeScreenProvider>(context, listen: false);
-    homeProvider.initUserLocation();
+    final homeProvider =
+        Provider.of<HomeScreenProvider>(context, listen: false);
+    await homeProvider.initUserLocation();
+    await homeProvider.getEventsInRaduis();
+  }
+
+  Future<void> _refreshData() async {
+    final homeProvider =
+        Provider.of<HomeScreenProvider>(context, listen: false);
+
+    await homeProvider.getEventsInRaduis();
   }
 
   final List<String> banners = [
@@ -38,48 +49,54 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            backgroundColor: primaryColor,
-            pinned: true,
-            floating: true,
-            expandedHeight: 130.fh,
-            automaticallyImplyLeading: false,
-            centerTitle: false,
-            flexibleSpace: FlexibleSpaceBar(
-              collapseMode: CollapseMode.pin,
-              background: PrimaryHeaderContainer(
-                // height: 150.fh,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(height: 5.fh),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 20.fh),
-                      child: const TSearchContainer(),
-                    )
-                  ],
+      body: RefreshIndicator(
+        key: _refreshIndicatorKey,
+        onRefresh: _refreshData,
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              backgroundColor: primaryColor,
+              pinned: true,
+              floating: true,
+              expandedHeight: 130.fh,
+              automaticallyImplyLeading: false,
+              centerTitle: false,
+              flexibleSpace: FlexibleSpaceBar(
+                collapseMode: CollapseMode.pin,
+                background: PrimaryHeaderContainer(
+                  // height: 150.fh,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(height: 5.fh),
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 20.fh),
+                        child: const TSearchContainer(),
+                      )
+                    ],
+                  ),
                 ),
               ),
+              title: const THomeAppBar(),
             ),
-            title: const THomeAppBar(),
-          ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return Column(
-                  children: [
-                    SizedBox(height: 8.fh),
-                    PromoCarouselWidget(banners: banners),
-                    const EventList(),
-                  ],
-                );
-              },
-              childCount: 1, // Adjust this count as needed
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  return Column(
+                    children: [
+                      SizedBox(height: 8.fh),
+                      SizedBox(
+                        // height: 200.fh,
+                        child: PromoCarouselWidget(banners: banners)),
+                      const EventList(),
+                    ],
+                  );
+                },
+                childCount: 1, // Adjust this count as needed
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

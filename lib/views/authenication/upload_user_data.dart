@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-
 class UploadUserData extends StatefulWidget {
   bool? fromProfile;
   UploadUserData({
@@ -29,7 +28,8 @@ class _UploadUserDataState extends State<UploadUserData> {
   final ProfileScreenProvider _profileScreenProvider = ProfileScreenProvider();
   final _formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
+  TextEditingController bestGameController = TextEditingController();
+  TextEditingController hobbiesController = TextEditingController();
   TextEditingController cityController = TextEditingController();
   File? _imageFile;
   final picker = ImagePicker();
@@ -53,10 +53,16 @@ class _UploadUserDataState extends State<UploadUserData> {
     currentUser =
         Provider.of<ProfileScreenProvider>(context, listen: false).currentUser;
 
-    nameController = TextEditingController(text: currentUser!.name);
-    cityController = TextEditingController(text: currentUser!.address);
+    nameController = TextEditingController(text: currentUser?.name ?? "");
+    cityController = TextEditingController(text: currentUser?.address ?? "");
+    bestGameController =
+        TextEditingController(text: currentUser?.bestGame ?? "");
+    hobbiesController = TextEditingController(text: currentUser?.hobbies ?? "");
 
-    currentUserPic = currentUser!.profileImage;
+    currentUserPic = currentUser?.profileImage ?? "";
+    selectedGender =
+        (currentUser!.gender == "" ? "Gender" : currentUser!.gender) ??
+            "Gender";
   }
 
   // Taking image from camera for user profile pic and storing it to on server
@@ -84,7 +90,13 @@ class _UploadUserDataState extends State<UploadUserData> {
 
       await _profileScreenProvider
           .updateUserDataWithFile(
-              context, nameController.text, cityController.text, _imageFile)
+              context,
+              nameController.text,
+              cityController.text,
+              selectedGender,
+              bestGameController.text,
+              hobbiesController.text,
+              _imageFile)
           .whenComplete(() {
         setState(() {
           isLoading = false;
@@ -109,7 +121,7 @@ class _UploadUserDataState extends State<UploadUserData> {
       ),
       body: Form(
         key: _formKey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
+        // autovalidateMode: AutovalidateMode.onUserInteraction,
         child: Container(
           margin: const EdgeInsets.only(
             left: 25,
@@ -121,7 +133,7 @@ class _UploadUserDataState extends State<UploadUserData> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsets.only(top: size.height * 0.05),
+                  padding: EdgeInsets.only(top: size.height * 0.03),
                   child: SingleChildScrollView(
                     child: SizedBox(
                       height: size.height * 0.75,
@@ -192,7 +204,7 @@ class _UploadUserDataState extends State<UploadUserData> {
                             child: AppTextField(
                               controller: nameController,
                               textFieldType: TextFieldType.NAME,
-                              isValidationRequired: true,
+                              isValidationRequired: false,
                               textStyle: primaryTextStyle(
                                 context,
                               ),
@@ -209,12 +221,92 @@ class _UploadUserDataState extends State<UploadUserData> {
                             child: AppTextField(
                               controller: cityController,
                               textFieldType: TextFieldType.NAME,
-                              isValidationRequired: true,
+                              isValidationRequired: false,
                               textStyle: primaryTextStyle(
                                 context,
                               ),
                               errorThisFieldRequired: errorThisFieldRequired,
                               hintText: "Address",
+                            ),
+                          ),
+
+                          SizedBox(
+                            height: size.height * 0.03,
+                          ),
+
+                          Container(
+                            height: size.height * 0.065,
+                            decoration: BoxDecoration(
+                              color: greyScaleColor,
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 20.0, right: 10),
+                              child: Center(
+                                child: DropdownButton(
+                                  elevation: 0,
+                                  underline: const SizedBox(),
+                                  value: selectedGender,
+                                  iconEnabledColor: lightBlackColor,
+                                  iconDisabledColor: lightBlackColor,
+                                  // dropdownColor: lightBlackColor,
+                                  isExpanded: true,
+                                  icon: const Icon(Icons.arrow_drop_down),
+                                  items: gendersList.map((String items) {
+                                    return DropdownMenuItem(
+                                      value: items,
+                                      child: Text(
+                                        "${items[0].toUpperCase()}${items.substring(1).toLowerCase()}",
+                                        style: primaryTextStyle(
+                                          context,
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String? newValue) {
+                                    setState(() {
+                                      selectedGender = newValue!;
+                                    });
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          SizedBox(
+                            height: size.height * 0.03,
+                          ),
+
+                          SizedBox(
+                            // height: size.height * 0.067,
+                            child: AppTextField(
+                              controller: bestGameController,
+                              textFieldType: TextFieldType.NAME,
+                              isValidationRequired: false,
+                              textStyle: primaryTextStyle(
+                                context,
+                              ),
+                              errorThisFieldRequired: errorThisFieldRequired,
+                              hintText: "Best in Game",
+                            ),
+                          ),
+
+                          SizedBox(
+                            height: size.height * 0.03,
+                          ),
+
+                          SizedBox(
+                            // height: size.height * 0.067,
+                            child: AppTextField(
+                              controller: hobbiesController,
+                              textFieldType: TextFieldType.NAME,
+                              isValidationRequired: false,
+                              textStyle: primaryTextStyle(
+                                context,
+                              ),
+                              // errorThisFieldRequired: errorThisFieldRequired,
+                              hintText: "Hobbies",
                             ),
                           ),
 
@@ -388,9 +480,6 @@ class _UploadUserDataState extends State<UploadUserData> {
                           //   ),
                           // ),
 
-                          SizedBox(
-                            height: size.height * 0.1,
-                          ),
                           // RichText(
                           //   textAlign: TextAlign.center,
                           //   text: TextSpan(
@@ -422,6 +511,9 @@ class _UploadUserDataState extends State<UploadUserData> {
                         //     "${currentUser?.name == nameController.text} ${currentUser?.address == cityController.text}");
                         if (currentUser?.name == nameController.text &&
                             currentUser?.address == cityController.text &&
+                            currentUser?.bestGame == bestGameController.text &&
+                            currentUser?.gender == selectedGender &&
+                            currentUser?.hobbies == hobbiesController.text &&
                             _imageFile == null) {
                           Navigator.pop(context);
                         } else {

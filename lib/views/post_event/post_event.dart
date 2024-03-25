@@ -49,20 +49,26 @@ class _PostEventScreenState extends State<PostEventScreen> {
   }
 
   //  Submiting user data form to server
-  _submitForm() async {
+  _submitForm(PostEventProvider provider) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       setState(() {
         isLoading = true;
       });
       await _postEventProvider
-          .postEventDataWithFile(nameController.text, desController.text,
-              formattedDateTime!, _imageFile!)
+          .postEventDataWithFile(
+              context,
+              nameController.text,
+              desController.text,
+              formattedDateTime!,
+              provider.address!,
+              provider.addressLatitude!,
+              provider.addressLongitude!,
+              _imageFile!)
           .whenComplete(() {
         setState(() {
           isLoading = false;
         });
-        Navigator.pop(context);
       });
     }
   }
@@ -270,7 +276,7 @@ class _PostEventScreenState extends State<PostEventScreen> {
                             showScafoldSnackBar(
                                 context, "Please select a image!");
                           } else {
-                            _submitForm();
+                            _submitForm(value);
                           }
                         }, "Post"),
                 ],

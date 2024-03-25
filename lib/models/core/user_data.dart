@@ -7,26 +7,22 @@ class UserData {
   String? name;
   String phone;
   String? address;
+  String? gender;
   String? profileImage;
+  String? bestGame;
+  String? hobbies;
   UserData({
     required this.userId,
     required this.username,
     this.name,
     required this.phone,
     this.address,
+    this.gender,
     this.profileImage,
+    this.bestGame,
+    this.hobbies,
   });
 
-  
-
-  // "user": {
-  //       "id": "cwNPEJvA6mNex6rerxAGFsIjQ0R2",
-  //       "username": "userbhvwnl",
-  //       "name": "",
-  //       "phone": "+918192839378",
-  //       "address": "",
-  //       "profile_image": ""
-  //   },
 
  
 
@@ -37,7 +33,10 @@ class UserData {
       'name': name,
       'phone': phone,
       'address': address,
+      'gender': gender,
       'profile_image': profileImage,
+      'best_game': bestGame,
+      'hobbies': hobbies,
     };
   }
 
@@ -48,7 +47,10 @@ class UserData {
       name: map['name'] != null ? map['name'] as String : null,
       phone: map['phone'] as String,
       address: map['address'] != null ? map['address'] as String : null,
+      gender: map['gender'] != null ? map['gender'] as String : null,
       profileImage: map['profile_image'] != null ? map['profile_image'] as String : null,
+      bestGame: map['best_game'] != null ? map['best_game'] as String : null,
+      hobbies: map['hobbies'] != null ? map['hobbies'] as String : null,
     );
   }
 

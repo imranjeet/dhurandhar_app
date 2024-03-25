@@ -39,12 +39,12 @@ class _MainScreenState extends State<MainScreen> {
     currentIndex = widget.currentIndex!;
   }
 
-  final List _pages = [
-    const HomeScreen(),
-    const SearchScreen(),
-    const NotificationScreen(),
-    const ProfileScreen(),
-  ];
+  // final List _pages = [
+  //   const HomeScreen(),
+  //   const SearchScreen(),
+  //   const NotificationScreen(),
+  //   const ProfileScreen(),
+  // ];
 
   void onTap(int index) {
     setState(() {
@@ -111,7 +111,16 @@ class _MainScreenState extends State<MainScreen> {
             return true;
           }
         },
-        child: _pages[currentIndex],
+        child: IndexedStack(
+          index: currentIndex,
+          children: const <Widget>[
+            HomeScreen(),
+            SearchScreen(),
+            NotificationScreen(),
+            ProfileScreen(),
+          ],
+        ),
+        // child: _pages[currentIndex],
       ),
       bottomNavigationBar:
           // NavigationBar(

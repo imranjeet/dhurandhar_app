@@ -83,8 +83,8 @@ class _SplashScreenState extends State<SplashScreen> {
           launchScreen(context, MainScreen(),
               pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
         } else {
-          launchScreen(context, UploadUserData(),
-              pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
+          // launchScreen(context, UploadUserData(),
+          //     pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
         }
       }
     });

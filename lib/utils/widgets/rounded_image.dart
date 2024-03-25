@@ -16,7 +16,7 @@ class TRoundedImage extends StatelessWidget {
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(TSizes.md)),
       child: ClipRRect(
           borderRadius: BorderRadius.circular(TSizes.md),
-          child: Image(image: AssetImage(imageUrl), fit: BoxFit.contain)),
+          child: Image(image: AssetImage(imageUrl), fit: BoxFit.fill)),
     );
   }
 }

@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dhurandhar/models/core/user_data.dart';
 import 'package:dhurandhar/providers/profile_provider.dart';
 import 'package:dhurandhar/utils/Colors.dart';
@@ -46,7 +45,7 @@ class ProfileScreen extends StatelessWidget {
                               )
                             : CircleAvatar(
                                 radius: size.height * 0.06,
-                                backgroundImage: CachedNetworkImageProvider(
+                                backgroundImage: NetworkImage(
                                     currUser.profileImage ?? ""),
                               ),
                         SizedBox(height: size.height * 0.01),
