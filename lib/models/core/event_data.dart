@@ -13,6 +13,8 @@ class EventData {
   String locationLongitude;
   String datetime;
   String eventImage;
+  List likes;
+  int totalLikes;
   EventData({
     required this.id,
     required this.user,
@@ -23,6 +25,8 @@ class EventData {
     required this.locationLongitude,
     required this.datetime,
     required this.eventImage,
+    required this.likes,
+    required this.totalLikes,
   });
 
   Map<String, dynamic> toMap() {
@@ -35,14 +39,16 @@ class EventData {
       'locationLatitude': locationLatitude,
       'locationLongitude': locationLongitude,
       'datetime': datetime,
-      'eventImage': eventImage,
+      'event_image': eventImage,
+      'likes': likes,
+      'total_likes': totalLikes,
     };
   }
 
   factory EventData.fromMap(Map<String, dynamic> map) {
     return EventData(
       id: map['id'] as int,
-      user: UserData.fromMap(map['user'] as Map<String,dynamic>),
+      user: UserData.fromMap(map['user'] as Map<String, dynamic>),
       title: map['title'] as String,
       description: map['description'] as String,
       locationName: map['location_name'] as String,
@@ -50,22 +56,13 @@ class EventData {
       locationLongitude: map['location_longitude'] as String,
       datetime: map['datetime'] as String,
       eventImage: map['event_image'] as String,
+      likes: map['likes'] as List,
+      totalLikes: map['total_likes'] as int,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory EventData.fromJson(String source) => EventData.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory EventData.fromJson(String source) =>
+      EventData.fromMap(json.decode(source) as Map<String, dynamic>);
 }
-
-// {
-//             "id": 8,
-//             
-//             "title": "Event 2",
-//             "description": "Description of the event",
-//             "location_name": "Location 2",
-//             "location_latitude": "28.834722",
-//             "location_longitude": "78.243889",
-//             "datetime": "2024-03-15 16:39:00",
-//             "event_image": "http://127.0.0.1:8000/event_images/cwNPEJvA6mNex6rerxAGFsIjQ0R2_download_g42Aa1d.jpeg"
-//         },

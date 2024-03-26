@@ -43,3 +43,14 @@ extension StringExtension on String? {
     return true;
   }
 }
+
+String formatNumberToString(int number) {
+  if (number >= 1000000) {
+    double num = number / 1000000;
+    return '${num.toStringAsFixed(num.truncateToDouble() == num ? 0 : 1)}m';
+  } else if (number >= 1000) {
+    double num = number / 1000;
+    return '${num.toStringAsFixed(num.truncateToDouble() == num ? 0 : 1)}k';
+  }
+  return number.toString();
+}

@@ -2,6 +2,7 @@ import 'package:dhurandhar/models/core/event_data.dart';
 import 'package:dhurandhar/providers/home_provider.dart';
 import 'package:dhurandhar/utils/Colors.dart';
 import 'package:dhurandhar/utils/widgets/Common.dart';
+import 'package:dhurandhar/views/home/widgets/event_like_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:iconsax/iconsax.dart';
@@ -48,7 +49,7 @@ class EventList extends StatelessWidget {
                       padding: EdgeInsets.symmetric(
                           horizontal: size.width * 0.03,
                           vertical: size.height * 0.01),
-                      height: size.height * 0.4,
+                      height: size.height * 0.44,
                       width: size.width * 0.9,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
@@ -77,15 +78,16 @@ class EventList extends StatelessWidget {
                                         )
                                       : CircleAvatar(
                                           radius: size.height * 0.03,
-                                          backgroundImage: NetworkImage(
-                                              event.user.profileImage.toString()),
+                                          backgroundImage: NetworkImage(event
+                                              .user.profileImage
+                                              .toString()),
                                         ),
                                   SizedBox(width: size.width * 0.03),
-                                  Text(
-                                      event.user.name ?? "@${event.user.username}"),
+                                  Text(event.user.name ??
+                                      "@${event.user.username}"),
                                 ],
                               ),
-                               const Icon(Iconsax.more),
+                              const Icon(Iconsax.more),
                             ],
                           ),
                           SizedBox(height: size.height * 0.01),
@@ -111,7 +113,7 @@ class EventList extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Icon(Iconsax.location),
+                              const Icon(Iconsax.location, size: 20),
                               SizedBox(
                                 width: size.width * 0.75,
                                 child: Text(event.locationName,
@@ -119,8 +121,8 @@ class EventList extends StatelessWidget {
                                     maxLines: 1,
                                     style: primaryTextStyle(context,
                                         color: primaryColor,
-                                        weight: FontWeight.w700,
-                                        size: 16)),
+                                        weight: FontWeight.w500,
+                                        size: 14)),
                               )
                             ],
                           ),
@@ -128,7 +130,7 @@ class EventList extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Icon(Iconsax.alarm),
+                              const Icon(Iconsax.clock, size: 20),
                               SizedBox(
                                 width: size.width * 0.75,
                                 child: Text(event.datetime,
@@ -136,53 +138,18 @@ class EventList extends StatelessWidget {
                                     maxLines: 1,
                                     style: primaryTextStyle(context,
                                         color: primaryColor,
-                                        weight: FontWeight.w700,
-                                        size: 16)),
+                                        weight: FontWeight.w500,
+                                        size: 14)),
                               )
                             ],
                           ),
-                          // SizedBox(
-                          //   // width: size.width * 0.75,
-                          //   child: RichText(
-                          //     textAlign: TextAlign.start,
-                          //     overflow: TextOverflow.ellipsis,
-                          //     maxLines: 1,
-                          //     text: TextSpan(
-                          //       text: "Location: ",
-                          //       style: primaryTextStyle(context,
-                          //           weight: FontWeight.w400,
-                          //           size: 16,
-                          //           color: const Color(0XFF000000)),
-                          //       children: <TextSpan>[
-                          //         TextSpan(
-                          //             text: event.locationName,
-                          //             style: primaryTextStyle(context,
-                          //                 color: secondaryColor,
-                          //                 weight: FontWeight.w700,
-                          //                 size: 16)),
-                          //       ],
-                          //     ),
-                          //   ),
-                          // ),
-                          // SizedBox(height: size.height * 0.01),
-                          // RichText(
-                          //   textAlign: TextAlign.start,
-                          //   text: TextSpan(
-                          //     text: "Time: ",
-                          //     style: primaryTextStyle(context,
-                          //         weight: FontWeight.w400,
-                          //         size: 16,
-                          //         color: const Color(0XFF000000)),
-                          //     children: <TextSpan>[
-                          //       TextSpan(
-                          //           text: event.datetime,
-                          //           style: primaryTextStyle(context,
-                          //               color: secondaryColor,
-                          //               weight: FontWeight.w700,
-                          //               size: 16)),
-                          //     ],
-                          //   ),
-                          // ),
+                           SizedBox(height: size.height * 0.01),
+                          Row(
+                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              EventLike(size: size, event: event),
+                            ],
+                          ),
                         ],
                       ),
                     );
@@ -190,3 +157,4 @@ class EventList extends StatelessWidget {
     });
   }
 }
+

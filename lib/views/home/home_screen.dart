@@ -53,6 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
         key: _refreshIndicatorKey,
         onRefresh: _refreshData,
         child: CustomScrollView(
+          physics: const BouncingScrollPhysics(),
           slivers: [
             SliverAppBar(
               backgroundColor: primaryColor,

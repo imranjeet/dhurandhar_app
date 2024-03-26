@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:dhurandhar/providers/event_like_provider.dart';
 import 'package:dhurandhar/providers/home_provider.dart';
 import 'package:dhurandhar/providers/onboarding_tour_provider.dart';
 import 'package:dhurandhar/providers/mobile_auth_provider.dart';
@@ -85,6 +86,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => HomeScreenProvider()),
         ChangeNotifierProvider(create: (_) => PostEventProvider()),
         ChangeNotifierProvider(create: (_) => ProfileScreenProvider()),
+        ChangeNotifierProvider(create: (_) => EventLikeProvider()),
       ],
       child: MaterialApp(
         navigatorKey: navigatorKey,
