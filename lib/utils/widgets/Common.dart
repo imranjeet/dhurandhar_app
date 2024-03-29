@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:shimmer/shimmer.dart';
 
 TextStyle boldTextStyle(BuildContext context,
     {int? size,
@@ -53,6 +53,14 @@ TextStyle secondaryTextStyle(BuildContext context,
             ? Colors.white
             : color ?? textSecondaryColorGlobal,
     fontWeight: weight ?? FontWeight.normal,
+  );
+}
+
+Widget shimmerEffect(Widget child) {
+  return Shimmer.fromColors(
+    baseColor: Colors.grey[300]!,
+    highlightColor: Colors.grey[100]!,
+    child: child,
   );
 }
 
@@ -253,10 +261,8 @@ DefaultValues defaultValues = DefaultValues();
 //   }
 
 Widget bottomCustomButton(
-  BuildContext context,
-  VoidCallback onTap,
-  String value, {Color? color}
-) {
+    BuildContext context, VoidCallback onTap, String value,
+    {Color? color}) {
   return GestureDetector(
     onTap: onTap,
     child: Container(
@@ -264,12 +270,16 @@ Widget bottomCustomButton(
       padding: const EdgeInsets.symmetric(horizontal: 30),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(35),
-        color:color ?? primaryColor,
+        color: color ?? primaryColor,
       ),
       child: Center(
           child: Text(
         value,
-        style: primaryTextStyle(context, isStaticCol: true, color: Colors.white, size: 16, weight: FontWeight.w700),
+        style: primaryTextStyle(context,
+            isStaticCol: true,
+            color: Colors.white,
+            size: 16,
+            weight: FontWeight.w700),
       )),
 
       // child: CircleAvatar(

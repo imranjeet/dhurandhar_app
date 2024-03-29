@@ -1,13 +1,24 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:async';
+
+import 'package:dhurandhar/models/core/apiResponse.dart';
+import 'package:dhurandhar/models/core/event_data.dart';
 import 'package:dhurandhar/providers/home_provider.dart';
 import 'package:dhurandhar/utils/Colors.dart';
+import 'package:dhurandhar/utils/constants/colors.dart';
 import 'package:dhurandhar/utils/constants/image_strings.dart';
+import 'package:dhurandhar/utils/debouncing.dart';
 import 'package:dhurandhar/utils/size_config.dart';
+import 'package:dhurandhar/utils/widgets/Common.dart';
 import 'package:dhurandhar/views/home/widgets/event_list.dart';
+import 'package:dhurandhar/views/home/widgets/event_listview_card.dart';
 import 'package:dhurandhar/views/home/widgets/home_app_bar.dart';
 import 'package:dhurandhar/views/home/widgets/primary_header_container.dart';
 import 'package:dhurandhar/views/home/widgets/promo_carousel_widget.dart';
-import 'package:dhurandhar/views/home/widgets/search_container.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -18,12 +29,21 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final HomeScreenProvider _homeScreenProvider = HomeScreenProvider();
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
+  TextEditingController searchController = TextEditingController();
+  FocusNode desFocus = FocusNode();
+  late Debouncer _debouncer;
+  int _stackIndex = 0;
+
   @override
   void initState() {
     super.initState();
     initData();
+    searchController.addListener(_handleTextFieldChange);
+    _debouncer = Debouncer();
+    _stackIndex = 0;
   }
 
   initData() async {
@@ -36,8 +56,30 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _refreshData() async {
     final homeProvider =
         Provider.of<HomeScreenProvider>(context, listen: false);
-
     await homeProvider.getEventsInRaduis();
+  }
+
+  void _handleTextFieldChange() {
+    if (searchController.text.length > 3) {
+      setState(() {
+        _stackIndex = 4;
+      });
+    } else {
+      setState(() {
+        _stackIndex = 0;
+      });
+    }
+  }
+
+  void debounceFuture(
+    Debouncer debouncer,
+    Completer completer,
+    Function delayedFuture,
+    dynamic param,
+  ) {
+    debouncer.run(() async {
+      completer.complete(await delayedFuture(param));
+    });
   }
 
   final List<String> banners = [
@@ -45,6 +87,11 @@ class _HomeScreenState extends State<HomeScreen> {
     TImages.promoBanner2,
     TImages.promoBanner3,
   ];
+
+  @override
+  void setState(fn) {
+    if (mounted) super.setState(fn);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,9 +118,59 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       SizedBox(height: 5.fh),
                       Padding(
-                        padding: EdgeInsets.only(bottom: 20.fh),
-                        child: const TSearchContainer(),
-                      )
+                        padding:
+                            EdgeInsets.only(bottom: 20.fh, left: 10, right: 10),
+                        child: SizedBox(
+                          height: 45.fh,
+                          child: Center(
+                            child: Container(
+                              height: 45.fh,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    width: 1.0,
+                                    color: desFocus.hasFocus
+                                        ? primaryColor
+                                        : greyScaleColor,
+                                  ),
+                                  color: greyScaleColor,
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 5),
+                                child: Center(
+                                  child: TextFormField(
+                                    textAlignVertical: TextAlignVertical.center,
+                                    controller: searchController,
+                                    focusNode: desFocus,
+                                    decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        suffixIcon: searchController
+                                                .text.isNotEmpty
+                                            ? IconButton(
+                                                icon: const Icon(Icons.clear,
+                                                    color: TColors.darkerGrey),
+                                                onPressed: () {
+                                                  // Clear the text field
+                                                  searchController.clear();
+                                                },
+                                              )
+                                            : null,
+                                        prefixIcon: const Icon(
+                                            Iconsax.search_normal,
+                                            color: TColors.darkerGrey,
+                                            size: 18),
+                                        contentPadding: EdgeInsets.zero,
+                                        hintText: "Search.."),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      // Padding(
+                      //   padding: EdgeInsets.only(bottom: 20.fh),
+                      //   child: const TSearchContainer(),
+                      // )
                     ],
                   ),
                 ),
@@ -87,9 +184,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       SizedBox(height: 8.fh),
                       SizedBox(
-                        // height: 200.fh,
-                        child: PromoCarouselWidget(banners: banners)),
-                      const EventList(),
+                          // height: 200.fh,
+                          child: PromoCarouselWidget(banners: banners)),
+                      _stackIndex == 4
+                          ? _searchResults(context)
+                          : const EventList(),
                     ],
                   );
                 },
@@ -99,6 +198,56 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _searchResults(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    final completer = Completer<ProviderResponse<List<EventData>>>();
+    debounceFuture(_debouncer, completer, _homeScreenProvider.searchBarQuery,
+        {"search": searchController.text});
+    return FutureBuilder<ProviderResponse<List<EventData>>>(
+      future: completer.future,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final eventList = snapshot.data!.data;
+          if (eventList?.isEmpty ?? true) {
+            return Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: Column(
+                children: [
+                  SvgPicture.asset("assets/empty_data.svg",
+                      color: primaryColor),
+                  SizedBox(height: size.height * 0.01),
+                  Text(
+                    "No events  found!",
+                    style: boldTextStyle(context),
+                  )
+                ],
+              ),
+            );
+          } else {
+            return ListView.builder(
+                padding: EdgeInsets.zero,
+                itemCount: eventList?.length ?? 0,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, i) {
+                  EventData event = eventList![i];
+                  return EventListViewCard(event: event);
+                });
+          }
+        } else {
+          return ListView.builder(
+              padding: EdgeInsets.zero,
+              itemCount: 5,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, i) {
+                return const ShimmerEventListViewCard();
+              });
+        }
+      },
     );
   }
 }

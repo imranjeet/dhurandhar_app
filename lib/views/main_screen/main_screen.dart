@@ -4,10 +4,10 @@ import 'package:dhurandhar/utils/Colors.dart';
 import 'package:dhurandhar/utils/appTheme.dart';
 import 'package:dhurandhar/utils/size_config.dart';
 import 'package:dhurandhar/utils/widgets/Common.dart';
+import 'package:dhurandhar/views/group_chats_screen/chats_list_screen.dart';
 import 'package:dhurandhar/views/home/home_screen.dart';
 import 'package:dhurandhar/views/notification_screen.dart/notification_screen.dart';
 import 'package:dhurandhar/views/post_event/post_event.dart';
-import 'package:dhurandhar/views/search_screen/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -115,7 +115,7 @@ class _MainScreenState extends State<MainScreen> {
           index: currentIndex,
           children: const <Widget>[
             HomeScreen(),
-            SearchScreen(),
+            ChatsListScreen(),
             NotificationScreen(),
             ProfileScreen(),
           ],
@@ -163,16 +163,16 @@ class _MainScreenState extends State<MainScreen> {
                   icon: Icon(Iconsax.home, size: 28),
                 ),
                 BottomNavigationBarItem(
-                  label: "Search",
+                  label: "Chats",
                   icon: Padding(
-                    padding: EdgeInsets.only(right: 28),
-                    child: Icon(Iconsax.search_normal, size: 28),
+                    padding: EdgeInsets.only(right: 32),
+                    child: Icon(Iconsax.message, size: 28),
                   ),
                 ),
                 BottomNavigationBarItem(
                   label: "Notifications",
                   icon: Padding(
-                      padding: EdgeInsets.only(left: 28),
+                      padding: EdgeInsets.only(left: 32),
                       child: Icon(Iconsax.notification, size: 28)),
                 ),
                 BottomNavigationBarItem(

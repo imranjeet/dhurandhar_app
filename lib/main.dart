@@ -50,7 +50,6 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     init();
-    
   }
 
   @override
@@ -64,8 +63,8 @@ class _MyAppState extends State<MyApp> {
       if (e == ConnectivityResult.none) {
         log('not connected');
         isCurrentlyOnNoInternet = true;
-        launchScreen(
-            navigatorKey.currentState!.overlay!.context, const NoInternetScreen());
+        launchScreen(navigatorKey.currentState!.overlay!.context,
+            const NoInternetScreen());
       } else {
         if (isCurrentlyOnNoInternet) {
           Navigator.pop(navigatorKey.currentState!.overlay!.context);
@@ -111,15 +110,16 @@ class InitializeApp {
     ]);
 
     // Initilizing firebase
-    await Firebase.initializeApp( options:
-      const FirebaseOptions(
-      apiKey: 'AIzaSyAk4qGi5fpkk584hMZk57skpJT-g-gRx5c',
-      appId: '1:460391389322:android:a9a2ba6f0072ea76ccf573',
-      messagingSenderId: '460391389322',
-      projectId: 'dhurandhar-3cb06',
-    )
-      // options: DefaultFirebaseOptions.currentPlatform
-      );
+    await Firebase.initializeApp(
+        options: const FirebaseOptions(
+            apiKey: 'AIzaSyAk4qGi5fpkk584hMZk57skpJT-g-gRx5c',
+            appId: '1:460391389322:android:a9a2ba6f0072ea76ccf573',
+            messagingSenderId: '460391389322',
+            projectId: 'dhurandhar-3cb06',
+            databaseURL:
+                "https://dhurandhar-3cb06-default-rtdb.asia-southeast1.firebasedatabase.app")
+        // options: DefaultFirebaseOptions.currentPlatform
+        );
 
     // Pass all uncaught errors from the framework to Crashlytics.
     // FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;

@@ -6,7 +6,6 @@ import 'package:dhurandhar/providers/onboarding_tour_provider.dart';
 import 'package:dhurandhar/utils/custom_logger.dart';
 import 'package:dhurandhar/utils/widgets/Common.dart';
 import 'package:dhurandhar/views/authenication/auth_screen.dart';
-import 'package:dhurandhar/views/authenication/upload_user_data.dart';
 import 'package:dhurandhar/views/main_screen/main_screen.dart';
 import 'package:dhurandhar/views/onboarding_tour/onboarding_tour.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -70,7 +69,7 @@ class _SplashScreenState extends State<SplashScreen> {
       } else {
         // final user = FirebaseAuth.instance.currentUser!;
         final token = await user.getIdToken();
-        CustomLogger.instance.severe("token: $token");
+        CustomLogger.instance.singleLine("token: $token");
         initPushNotificationSystem();
         // Provider.of<AppBasicInfoProvider>(context, listen: false)
         //     .initAppBaseData();

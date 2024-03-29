@@ -1,6 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dhurandhar/models/core/event_data.dart';
 import 'package:dhurandhar/models/core/user_data.dart';
 import 'package:dhurandhar/utils/Constants.dart';
 import 'package:dhurandhar/utils/custom_logger.dart';
@@ -13,6 +16,10 @@ import 'package:provider/provider.dart';
 class ProfileScreenProvider extends ChangeNotifier {
   FirebaseAuth auth = FirebaseAuth.instance;
   UserData? currentUser;
+  UserData? otherUser;
+  List<EventData> otherUserEvents = [];
+  List<EventData> currentUserEvents = [];
+  bool isLoading = false;
 
   void setCurrentUserData(UserData? value) {
     currentUser = value;
@@ -68,16 +75,44 @@ class ProfileScreenProvider extends ChangeNotifier {
       var cUser = UserData.fromMap(decodedResponse['user']);
       Provider.of<ProfileScreenProvider>(context, listen: false)
           .setCurrentUserData(cUser);
-      // CustomLogger.instance.singleLine('cUser: ${currentUser?.name}');
-      // currentUser = cUser;
-      // CustomLogger.instance.singleLine('cUser: ${currentUser?.name}');
-      // notifyListeners();
-      // Handle successful response
     } else {
       CustomLogger.instance
           .singleLine('Request failed with status: ${response.statusCode}');
       toast(decodedResponse['error']);
       // Handle failed response
+    }
+  }
+
+  userProfileData(String uId, bool isFromProfile) async {
+    isLoading = true;
+    // notifyListeners();
+    var url = Uri.parse('${mBaseUrl}api/get_user_events/$uId/');
+    final user = FirebaseAuth.instance.currentUser!;
+    final token = await user.getIdToken();
+    final header = {"Authorization": token ?? ""};
+    final response = await http.get(url, headers: header);
+    CustomLogger.instance.severe(
+        'HTTP REQUEST: Type: GET 👉👉 {url: $url , statusCode: ${response.statusCode} , httpResponse.body: ${response.body}}');
+    var decodedResponse = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      List<EventData> events = (decodedResponse['events'] as List)
+          .map((eventData) => EventData.fromMap(eventData))
+          .toList();
+      if (!isFromProfile) {
+        var cUser = UserData.fromMap(decodedResponse['user']);
+        otherUser = cUser;
+        otherUserEvents = events;
+        isLoading = false;
+        notifyListeners();
+      } else {
+        currentUserEvents = events;
+        isLoading = false;
+        notifyListeners();
+      }
+    } else {
+      isLoading = false;
+      notifyListeners();
+      toast(decodedResponse['error']);
     }
   }
 }

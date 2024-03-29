@@ -198,7 +198,7 @@ class _PostEventScreenState extends State<PostEventScreen> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        formattedDateTime ?? "Event DateTime",
+                                        formattedDateTime ?? "Game Time",
                                         style: formattedDateTime == null
                                             ? primaryTextStyle(context,
                                                 color: lightBlackColor)

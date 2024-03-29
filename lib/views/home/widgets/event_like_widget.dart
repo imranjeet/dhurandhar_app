@@ -5,6 +5,7 @@ import 'package:dhurandhar/utils/Constants.dart';
 import 'package:dhurandhar/utils/StringExtensions.dart';
 import 'package:dhurandhar/utils/custom_logger.dart';
 import 'package:dhurandhar/utils/widgets/Common.dart';
+import 'package:dhurandhar/views/discussion/discussion_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
@@ -95,7 +96,12 @@ class _EventLikeState extends State<EventLike> {
             style:
                 primaryTextStyle(context, weight: FontWeight.w700, size: 16)),
         SizedBox(width: widget.size.width * 0.03),
-        const Icon(Iconsax.message, size: 28),
+        GestureDetector(
+            onTap: () {
+              launchScreen(context, ChatPage(eventData: widget.event),
+                  pageRouteAnimation: PageRouteAnimation.Slide);
+            },
+            child: const Icon(Iconsax.message, size: 28)),
       ],
     );
   }

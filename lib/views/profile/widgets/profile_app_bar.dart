@@ -9,13 +9,16 @@ class ProfileAppBar extends StatelessWidget {
   const ProfileAppBar({
     super.key,
     required this.username,
+    required this.isProfile,
   });
 
   final String username;
+  final bool isProfile;
 
   @override
   Widget build(BuildContext context) {
     return TAppBar(
+      showBackArrow: !isProfile,
       title: Column(
         children: [
           Text(
@@ -25,14 +28,16 @@ class ProfileAppBar extends StatelessWidget {
         ],
       ),
       action: [
-        IconButton(
-            onPressed: () {
-              launchScreen(context, UploadUserData(), pageRouteAnimation: PageRouteAnimation.Slide);
-            },
-            icon: Icon(
-              Iconsax.setting,
-              color: textWhite,
-            ))
+        if (isProfile)
+          IconButton(
+              onPressed: () {
+                launchScreen(context, UploadUserData(),
+                    pageRouteAnimation: PageRouteAnimation.Slide);
+              },
+              icon: Icon(
+                Iconsax.setting,
+                color: textWhite,
+              ))
       ],
     );
   }

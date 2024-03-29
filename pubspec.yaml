@@ -4,6 +4,7 @@ description: "A new Flutter project."
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
+
 version: 1.0.0+1
 
 environment:
@@ -35,6 +36,10 @@ dependencies:
   geolocator: ^10.1.1
   geocoding: ^3.0.0
   permission_handler: ^11.3.0
+  firebase_database: ^10.4.9
+  rxdart: ^0.27.7
+  shimmer: ^3.0.0
+
 
 
 dev_dependencies:
@@ -42,7 +47,6 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^2.0.0
-
 
 flutter:
 
@@ -58,8 +62,6 @@ flutter:
     - assets/banners/
     - assets/animations/
 
-  # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/assets-and-images/#resolution-aware
 
   # example:
   # fonts:
