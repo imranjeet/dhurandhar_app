@@ -1,9 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
+import 'dart:async';
 import 'dart:io';
+import 'package:dhurandhar/services/uni_service.dart';
 import 'package:dhurandhar/utils/Colors.dart';
 import 'package:dhurandhar/utils/appTheme.dart';
 import 'package:dhurandhar/utils/size_config.dart';
 import 'package:dhurandhar/utils/widgets/Common.dart';
+import 'package:dhurandhar/utils/widgets/handle_deeplink_helper.dart';
 import 'package:dhurandhar/views/group_chats_screen/chats_list_screen.dart';
 import 'package:dhurandhar/views/home/home_screen.dart';
 import 'package:dhurandhar/views/notification_screen.dart/notification_screen.dart';
@@ -32,11 +35,21 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int currentIndex = 0;
+  final UniService uniService = UniService();
+  late StreamSubscription<String> _deepLinkSubscription;
 
   @override
   void initState() {
     super.initState();
     currentIndex = widget.currentIndex!;
+    uniService.initUniLinks();
+    listenDeeplink();
+  }
+
+  listenDeeplink() {
+    _deepLinkSubscription = uniService.deepLinkStream.listen((String deepLink) {
+      HandleDeeplinkHelper().handleDeepLink(Uri.parse(deepLink));
+    });
   }
 
   // final List _pages = [
@@ -50,6 +63,13 @@ class _MainScreenState extends State<MainScreen> {
     setState(() {
       currentIndex = index;
     });
+  }
+
+  @override
+  void dispose() {
+    // Dispose the stream subscription
+    _deepLinkSubscription.cancel();
+    super.dispose();
   }
 
   @override
@@ -143,14 +163,15 @@ class _MainScreenState extends State<MainScreen> {
           clipBehavior: Clip.antiAlias,
           shape:
               const CircularNotchedRectangle(), // ← carves notch for FAB in BottomAppBar
-          color: inDarkMode(context) ? primaryColor : secondaryColor,
+          color: Colors.black,
+          // inDarkMode(context) ? primaryColor : secondaryColor,
           // ↑ use .withAlpha(0) to debug/peek underneath ↑ BottomAppBar
           elevation: 0,
           child: BottomNavigationBar(
               elevation: 0,
               type: BottomNavigationBarType.fixed,
-              backgroundColor:
-                  inDarkMode(context) ? primaryColor : secondaryColor,
+              backgroundColor: Colors.black,
+              // inDarkMode(context) ? primaryColor : secondaryColor,
               onTap: onTap,
               currentIndex: currentIndex,
               selectedItemColor: Colors.white,

@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 Color textPrimaryColorGlobal = textPrimaryColor;
 Color textSecondaryColorGlobal = textSecondaryColor;
 Color textWhite = Colors.white;
-Color primaryColor = const Color(0xFF0172B2);
-Color secondaryColor = const Color(0xFF001645);
+Color primaryColor = const Color.fromARGB(255, 12, 90, 14);
+Color secondaryColor = const Color.fromARGB(255, 123, 111, 5);
+// Color primaryColor = const Color(0xFF0172B2);
+// Color secondaryColor = const Color(0xFF001645);
 Color darkColor = const Color(0xFF35383F);
 Color darkBlackColor = const Color(0xFF212121);
 Color lightBlackColor = const Color(0xFF9E9E9E);
@@ -35,4 +37,3 @@ Color appBarBackgroundColorGlobal = Colors.white;
 Color appButtonBackgroundColorGlobal = Colors.white;
 // Color defaultAppButtonTextColorGlobal = Colors.red;
 Color defaultAppButtonTextColorGlobal = textPrimaryColorGlobal;
-

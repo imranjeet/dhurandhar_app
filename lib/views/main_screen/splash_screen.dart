@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:dhurandhar/providers/home_provider.dart';
 import 'package:dhurandhar/providers/onboarding_tour_provider.dart';
 import 'package:dhurandhar/utils/custom_logger.dart';
 import 'package:dhurandhar/utils/widgets/Common.dart';
@@ -42,7 +43,10 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   initAsync() async {
-    Timer(const Duration(seconds: 2), () async {
+    final homeProvider =
+        Provider.of<HomeScreenProvider>(context, listen: false);
+    await homeProvider.initUserLocation();
+    Timer(const Duration(milliseconds: 300), () async {
       if (await onboardingTourProvider.canLaunch()) {
         startTour();
       } else {

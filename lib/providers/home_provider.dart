@@ -80,7 +80,7 @@ class HomeScreenProvider extends ChangeNotifier {
 
   Future<void> getEventsInRaduis() async {
     isLoading = true;
-    notifyListeners();
+    // notifyListeners();
     var url = Uri.parse('${mBaseUrl}api/get_events_in_radius/');
     final user = FirebaseAuth.instance.currentUser!;
     final token = await user.getIdToken();
@@ -91,7 +91,7 @@ class HomeScreenProvider extends ChangeNotifier {
     final Map<String, String> formData = {
       'latitude': lat.toString(),
       'longitude': long.toString(),
-      'radius_km': "50",
+      'radius_km': eventsAroundRadius.toString(),
     };
 
     final response = await http.post(url, body: formData, headers: header);
@@ -126,12 +126,6 @@ class HomeScreenProvider extends ChangeNotifier {
     if (toSearch!.length < 4) {
       return ProviderResponse.error("Some Error Occurred");
     }
-    // if (listEvents.isEmpty) {
-    //   return ProviderResponse.error(
-    //     "Events list is empty. Please try again later.",
-    //   );
-    // }
-
     try {
       // Filter the listEvents based on the search query
       List<EventData> filteredEvents = homeListEvents

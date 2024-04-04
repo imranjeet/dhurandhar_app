@@ -77,7 +77,7 @@ class EventDetailsScreen extends StatelessWidget {
                                   pageRouteAnimation: PageRouteAnimation.Slide);
                             },
                             child: CircleAvatar(
-                                radius: size.height * 0.06,
+                                radius: size.height * 0.04,
                                 child: Text(
                                   event.user.name == ""
                                       ? event.user.username
@@ -86,7 +86,7 @@ class EventDetailsScreen extends StatelessWidget {
                                       : event.user.username
                                           .substring(0, 1)
                                           .toUpperCase(),
-                                  style: const TextStyle(fontSize: 40),
+                                  style: const TextStyle(fontSize: 30),
                                 )),
                           )
                         : GestureDetector(
@@ -106,10 +106,11 @@ class EventDetailsScreen extends StatelessWidget {
                           ),
                     SizedBox(width: size.width * 0.03),
                     Text(
-                      event.user.name ?? "@${event.user.username}",
-                      style: primaryTextStyle(context,
-                          size: 20, weight: FontWeight.w500),
-                    ),
+                        event.user.name == ""
+                            ? event.user.username
+                            : event.user.name ?? "",
+                        style:
+                            primaryTextStyle(context, weight: FontWeight.w600)),
                   ],
                 ),
                 SizedBox(height: size.height * 0.02),
@@ -156,12 +157,7 @@ class EventDetailsScreen extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: size.height * 0.03),
-                Row(
-                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    EventLike(size: size, event: event),
-                  ],
-                ),
+                EventLike(size: size, event: event),
               ],
             ),
           ),

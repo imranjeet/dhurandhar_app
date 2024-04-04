@@ -153,7 +153,7 @@ class _UploadUserDataState extends State<UploadUserData> {
                                 child: Stack(
                                   children: [
                                     Center(
-                                      child: currentUserPic != null
+                                      child: currentUserPic != ""
                                           ? CircleAvatar(
                                               radius: size.height * 0.07,
                                               backgroundColor: greyScaleColor,

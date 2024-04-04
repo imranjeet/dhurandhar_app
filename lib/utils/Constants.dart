@@ -6,3 +6,4 @@ const mBaseUrl = "http://dhurandhar.xyz/";
 const passwordLengthGlobal = 8;
 
 LatLong defaultLocation =  const LatLong(30.316496, 78.032188);
+double eventsAroundRadius = 50; 

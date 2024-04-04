@@ -7,7 +7,6 @@ import 'package:dhurandhar/models/core/event_data.dart';
 import 'package:dhurandhar/providers/home_provider.dart';
 import 'package:dhurandhar/utils/Colors.dart';
 import 'package:dhurandhar/utils/constants/colors.dart';
-import 'package:dhurandhar/utils/constants/image_strings.dart';
 import 'package:dhurandhar/utils/debouncing.dart';
 import 'package:dhurandhar/utils/size_config.dart';
 import 'package:dhurandhar/utils/widgets/Common.dart';
@@ -16,6 +15,7 @@ import 'package:dhurandhar/views/home/widgets/event_listview_card.dart';
 import 'package:dhurandhar/views/home/widgets/home_app_bar.dart';
 import 'package:dhurandhar/views/home/widgets/primary_header_container.dart';
 import 'package:dhurandhar/views/home/widgets/promo_carousel_widget.dart';
+import 'package:dhurandhar/views/home/widgets/raduis_selection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:iconsax/iconsax.dart';
@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
   initData() async {
     final homeProvider =
         Provider.of<HomeScreenProvider>(context, listen: false);
-    await homeProvider.initUserLocation();
+    // await homeProvider.initUserLocation();
     await homeProvider.getEventsInRaduis();
   }
 
@@ -83,9 +83,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   final List<String> banners = [
-    TImages.promoBanner1,
-    TImages.promoBanner2,
-    TImages.promoBanner3,
+    "Spread the word! Promote this app to your favorite players and gamers. Let's grow our community together!",
+
+    "Share this app with friends and relatives. Let's expand our community and enjoy together!",
+
+    "Post your game events here and connect with challengers. Build excitement, share your passion!",
+
+    "Contribute to shaping India's gaming future. Develop, innovate, and collaborate through our app. Let's create legends together!",
+
+    "We oppose betting sites and unhealthy products that harm wealth and health. Our platform promotes respect and well-being for all.",
+    
   ];
 
   @override
@@ -95,12 +102,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: RefreshIndicator(
         key: _refreshIndicatorKey,
         onRefresh: _refreshData,
         child: CustomScrollView(
-          physics: const BouncingScrollPhysics(),
+          physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
             SliverAppBar(
               backgroundColor: primaryColor,
@@ -120,51 +128,73 @@ class _HomeScreenState extends State<HomeScreen> {
                       Padding(
                         padding:
                             EdgeInsets.only(bottom: 20.fh, left: 10, right: 10),
-                        child: SizedBox(
-                          height: 45.fh,
-                          child: Center(
-                            child: Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            SizedBox(
                               height: 45.fh,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                    width: 1.0,
-                                    color: desFocus.hasFocus
-                                        ? primaryColor
-                                        : greyScaleColor,
-                                  ),
-                                  color: greyScaleColor,
-                                  borderRadius: BorderRadius.circular(15)),
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 5),
-                                child: Center(
-                                  child: TextFormField(
-                                    textAlignVertical: TextAlignVertical.center,
-                                    controller: searchController,
-                                    focusNode: desFocus,
-                                    decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        suffixIcon: searchController
-                                                .text.isNotEmpty
-                                            ? IconButton(
-                                                icon: const Icon(Icons.clear,
-                                                    color: TColors.darkerGrey),
-                                                onPressed: () {
-                                                  // Clear the text field
-                                                  searchController.clear();
-                                                },
-                                              )
-                                            : null,
-                                        prefixIcon: const Icon(
-                                            Iconsax.search_normal,
-                                            color: TColors.darkerGrey,
-                                            size: 18),
-                                        contentPadding: EdgeInsets.zero,
-                                        hintText: "Search.."),
+                              width: size.width * 0.81,
+                              child: Center(
+                                child: Container(
+                                  height: 45.fh,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                        width: 1.0,
+                                        color: desFocus.hasFocus
+                                            ? primaryColor
+                                            : greyScaleColor,
+                                      ),
+                                      color: greyScaleColor,
+                                      borderRadius: BorderRadius.circular(15)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 5),
+                                    child: Center(
+                                      child: TextFormField(
+                                        textAlignVertical:
+                                            TextAlignVertical.center,
+                                        controller: searchController,
+                                        focusNode: desFocus,
+                                        decoration: InputDecoration(
+                                            border: InputBorder.none,
+                                            suffixIcon: searchController
+                                                    .text.isNotEmpty
+                                                ? IconButton(
+                                                    icon: const Icon(
+                                                        Icons.clear,
+                                                        color:
+                                                            TColors.darkerGrey),
+                                                    onPressed: () {
+                                                      // Clear the text field
+                                                      searchController.clear();
+                                                    },
+                                                  )
+                                                : null,
+                                            prefixIcon: const Icon(
+                                                Iconsax.search_normal,
+                                                color: TColors.darkerGrey,
+                                                size: 18),
+                                            contentPadding: EdgeInsets.zero,
+                                            hintText: "Search.."),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
+                            IconButton(
+                                onPressed: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return const RadiusSelectionBottomSheet();
+                                    },
+                                  ).whenComplete(() {
+                                    _refreshData();
+                                  });
+                                },
+                                icon: const Icon(Iconsax.filter,
+                                    color: Colors.white))
+                          ],
                         ),
                       ),
                       // Padding(

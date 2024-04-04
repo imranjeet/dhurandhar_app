@@ -84,7 +84,7 @@ class _PromoCarouselWidgetState extends State<PromoCarouselWidget> {
                 children: [
                   for (int i = 0; i < widget.banners.length; i++)
                     TCircularContainer(
-                      width: 20.fh,
+                      width: 13.fh,
                       height: 4.fh,
                       margin: const EdgeInsets.only(right: 10),
                       backgroundColor:

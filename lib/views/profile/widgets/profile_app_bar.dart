@@ -1,7 +1,7 @@
 import 'package:dhurandhar/utils/Colors.dart';
 import 'package:dhurandhar/utils/widgets/Common.dart';
 import 'package:dhurandhar/utils/widgets/appbar.dart';
-import 'package:dhurandhar/views/authenication/upload_user_data.dart';
+import 'package:dhurandhar/views/profile/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -31,7 +31,7 @@ class ProfileAppBar extends StatelessWidget {
         if (isProfile)
           IconButton(
               onPressed: () {
-                launchScreen(context, UploadUserData(),
+                launchScreen(context, const SettingsScreen(),
                     pageRouteAnimation: PageRouteAnimation.Slide);
               },
               icon: Icon(

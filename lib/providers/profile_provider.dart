@@ -115,4 +115,30 @@ class ProfileScreenProvider extends ChangeNotifier {
       toast(decodedResponse['error']);
     }
   }
+
+  Future<void> updateUsername(BuildContext context, String username) async {
+    var url = Uri.parse('${mBaseUrl}api/update_username/');
+    final user = FirebaseAuth.instance.currentUser!;
+    final token = await user.getIdToken();
+    final header = {"Authorization": token ?? ""};
+    // Define your form data
+    final Map<String, String> formData = {'username': username};
+    final response = await http.post(url, body: formData, headers: header);
+    CustomLogger.instance.severe(
+        'HTTP REQUEST: Type: GET 👉👉 {url: $url , statusCode: ${response.statusCode} , httpResponse.body: ${response.body}}');
+    var decodedResponse = jsonDecode(response.body);
+
+    // // Check the response
+    if (response.statusCode == 200) {
+      toast(decodedResponse['message']);
+      var cUser = UserData.fromMap(decodedResponse['user']);
+      Provider.of<ProfileScreenProvider>(context, listen: false)
+          .setCurrentUserData(cUser);
+    } else {
+      CustomLogger.instance
+          .singleLine('Request failed with status: ${response.statusCode}');
+      toast(decodedResponse['error']);
+      // Handle failed response
+    }
+  }
 }

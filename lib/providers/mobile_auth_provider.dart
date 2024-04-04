@@ -8,6 +8,7 @@ import 'package:dhurandhar/utils/Constants.dart';
 import 'package:dhurandhar/utils/custom_logger.dart';
 import 'package:dhurandhar/views/authenication/verify.dart';
 import 'package:dhurandhar/views/main_screen/main_screen.dart';
+import 'package:dhurandhar/views/main_screen/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
@@ -128,8 +129,8 @@ class MobileAuthenicationProvider extends ChangeNotifier {
   Future<void> logOut(BuildContext context) async {
     try {
       await auth.signOut();
-      // launchScreen(context, const SplashScreen(),
-      //     isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+      launchScreen(context, const SplashScreen(),
+          isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
       // Navigator.pushNamedAndRemoveUntil(
       //     context, SplashScreen.routeName, ((route) => false));
     } catch (e) {
@@ -149,7 +150,8 @@ class MobileAuthenicationProvider extends ChangeNotifier {
       // toast(decodeResponseData['message']);
       currentUser = UserData.fromMap(decodeResponseData['user']);
       notifyListeners();
-      Provider.of<ProfileScreenProvider>(context, listen: false).setCurrentUserData(currentUser);
+      Provider.of<ProfileScreenProvider>(context, listen: false)
+          .setCurrentUserData(currentUser);
       // ProfileScreenProvider().setCurrentUserData(currentUser);
       return true;
     } else {

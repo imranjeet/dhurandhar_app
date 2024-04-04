@@ -8,8 +8,8 @@ import 'package:dhurandhar/utils/widgets/Common.dart';
 import 'package:dhurandhar/views/discussion/discussion_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:http/http.dart' as http;
+import 'package:share_plus/share_plus.dart';
 
 class EventLike extends StatefulWidget {
   const EventLike({
@@ -81,27 +81,71 @@ class _EventLikeState extends State<EventLike> {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         GestureDetector(
-            onTap: () async {
-              onTapLike();
-            },
-            child: isLiked
-                ? const Icon(Icons.favorite, size: 32, color: Colors.red)
-                : const Icon(Iconsax.heart, size: 28, color: Colors.red)),
-        SizedBox(width: widget.size.width * 0.01),
-        Text(formatNumberToString(totalLikes),
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-            style:
-                primaryTextStyle(context, weight: FontWeight.w700, size: 16)),
-        SizedBox(width: widget.size.width * 0.03),
+          onTap: () async {
+            onTapLike();
+          },
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Text(isLiked ? "🖐" : "🖐🏽",
+                      style: const TextStyle(fontSize: 23)),
+                  SizedBox(width: widget.size.width * 0.01),
+                  Text(formatNumberToString(totalLikes),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: primaryTextStyle(context,
+                          weight: FontWeight.w700, size: 16)),
+                ],
+              ),
+              Text("Hi-Fi",
+                  style: secondaryTextStyle(context,
+                      size: 16, color: Colors.black))
+            ],
+          ),
+
+          // ? const Icon(Icons.favorite, size: 32, color: Colors.red)
+          // : const Icon(Iconsax.heart, size: 28, color: Colors.red)
+        ),
+        // SizedBox(width: widget.size.width * 0.01),
+        // Text(formatNumberToString(totalLikes),
+        //     overflow: TextOverflow.ellipsis,
+        //     maxLines: 1,
+        //     style:
+        //         primaryTextStyle(context, weight: FontWeight.w700, size: 16)),
+        // SizedBox(width: widget.size.width * 0.03),
         GestureDetector(
             onTap: () {
               launchScreen(context, ChatPage(eventData: widget.event),
                   pageRouteAnimation: PageRouteAnimation.Slide);
             },
-            child: const Icon(Iconsax.message, size: 28)),
+            child: Column(
+              children: [
+                const Icon(Icons.chat, size: 28),
+                Text("Chat",
+                    style: secondaryTextStyle(context,
+                        size: 16, color: Colors.black))
+              ],
+            )),
+
+        GestureDetector(
+            onTap: () {
+              Share.share(
+                  'check out new Game: https://app.dhurandhar.xyz//shareId/${widget.event.id} at ${widget.event.locationName}',
+                  subject: 'Look what I found!');
+            },
+            child: Column(
+              children: [
+                const Icon(Icons.speaker_phone, size: 28),
+                Text("Spread",
+                    style: secondaryTextStyle(context,
+                        size: 16, color: Colors.black))
+              ],
+            )),
       ],
     );
   }
